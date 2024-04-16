@@ -5,12 +5,12 @@ def generate_random_password(length)
   return password
 end
 
-puts "Enter the length of the password:"
+puts "Enter the length of the password required:"
 length = gets.chomp.to_i
 
 if length > 0
   puts "Randomly generated password of length #{length}:"
   puts generate_random_password(length)
 else
-  puts "Invalid input. Please enter a valid length."
+  puts "Please enter a valid length."
 end
