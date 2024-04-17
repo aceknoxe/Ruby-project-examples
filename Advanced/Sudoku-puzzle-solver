@@ -1,0 +1,74 @@
+''' backtracking algorithm to solve a Sudoku puzzle'''
+class Sudoku
+  def initialize(board)
+    @board = board
+  end
+
+  def solve
+    row, col = find_empty
+
+    return true unless row
+
+    (1..9).each do |num|
+      if is_valid?(row, col, num)
+        @board[row][col] = num
+
+        return true if solve
+
+        @board[row][col] = 0
+      end
+    end
+
+    false
+  end
+
+  private
+
+  def find_empty
+    @board.each_with_index do |row, i|
+      row.each_with_index do |num, j|
+        return [i, j] if num.zero?
+      end
+    end
+
+    nil
+  end
+
+  def is_valid?(row, col, num)
+    return false if @board[row].include?(num)
+
+    @board.each { |r| return false if r[col] == num }
+
+    start_row = row - row % 3
+    start_col = col - col % 3
+
+    3.times do |i|
+      3.times do |j|
+        return false if @board[i + start_row][j + start_col] == num
+      end
+    end
+
+    true
+  end
+end
+
+# Initialize a Sudoku puzzle
+board = [
+  [5, 3, 0, 0, 7, 0, 0, 0, 0],
+  [6, 0, 0, 1, 9, 5, 0, 0, 0],
+  [0, 9, 8, 0, 0, 0, 0, 6, 0],
+  [8, 0, 0, 0, 6, 0, 0, 0, 3],
+  [4, 0, 0, 8, 0, 3, 0, 0, 1],
+  [7, 0, 0, 0, 2, 0, 0, 0, 6],
+  [0, 6, 0, 0, 0, 0, 2, 8, 0],
+  [0, 0, 0, 4, 1, 9, 0, 0, 5],
+  [0, 0, 0, 0, 8, 0, 0, 7, 9]
+]
+
+sudoku = Sudoku.new(board)
+if sudoku.solve
+  puts "Solved Sudoku:"
+  sudoku.board.each { |row| puts row.join(" ") }
+else
+  puts "This Sudoku puzzle cannot be solved."
+end
